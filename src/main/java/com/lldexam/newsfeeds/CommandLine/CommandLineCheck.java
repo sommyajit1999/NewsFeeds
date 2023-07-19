@@ -9,9 +9,11 @@ import java.util.List;
 public class CommandLineCheck{
     List<CommandLineMethods> commands;
     @Autowired
-    public CommandLineCheck(SignUpCommandPattern signUpCommandPattern){
+    public CommandLineCheck(SignUpCommandPattern signUpCommandPattern,
+                            LoginCommandPattern loginCommandPattern){
         commands=new ArrayList<>();
         commands.add(signUpCommandPattern);
+        commands.add(loginCommandPattern);
     }
     public void executeCommand(String input){
         for(CommandLineMethods commands:commands){
