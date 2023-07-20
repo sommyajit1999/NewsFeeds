@@ -7,6 +7,7 @@ import com.lldexam.newsfeeds.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -38,6 +39,32 @@ public class UserService {
         currentUserRepo.save(currentLoginUser);
 
         return user;
+    }
+    public void followUser(String name){
+        CurrentLoginUser currentLoginUser=currentUserRepo.findTopByOrderByIdDesc();
+        Optional<User> follower=userRepository.findById(currentLoginUser.getCurrentUser().getId());
+        if(follower.isEmpty()){
+            System.out.println("No Current User..Kindly Login");
+            return;
+        }
+        Optional<User> following =userRepository.findByUserName(name);
+        if(following.isEmpty()){
+            System.out.println("No Such Account found");
+            return;
+        }
+
+        User followers=follower.get();
+        User followings=following.get();
+        ArrayList<User> list=new ArrayList<>();
+        list.add(followings);
+        followers.setFollowing(list);
+        list=new ArrayList<>();
+        list.add(followers);
+        followings.setFollowers(list);
+        User user1=userRepository.save(followers);
+        User user2=userRepository.save(followings);
+
+        return;
     }
 
 }

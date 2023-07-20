@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface CurrentUserRepo extends JpaRepository<CurrentLoginUser,Long> {
     @Override
     CurrentLoginUser save(CurrentLoginUser currentLoginUser);
+    CurrentLoginUser findTopByOrderByIdDesc();
 }

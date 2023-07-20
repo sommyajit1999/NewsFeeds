@@ -13,11 +13,11 @@ public class User extends BaseClass{
 
     private String userName;
     private String password;
-    @ManyToMany
-    private List<User> followers;
-    @ManyToMany
-    private List<User> following;
     @OneToMany
+    private List<User> followers;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<User> following;
+    @OneToMany(mappedBy = "user")
     private List<Feeds> feeds;
 
 }

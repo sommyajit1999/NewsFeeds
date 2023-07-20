@@ -1,9 +1,6 @@
 package com.lldexam.newsfeeds.Controllers;
 
-import com.lldexam.newsfeeds.DTO.LoginRequestDto;
-import com.lldexam.newsfeeds.DTO.LoginResponseDto;
-import com.lldexam.newsfeeds.DTO.SignUpRequestDto;
-import com.lldexam.newsfeeds.DTO.SignUpResponseDto;
+import com.lldexam.newsfeeds.DTO.*;
 import com.lldexam.newsfeeds.Service.UserService;
 import com.lldexam.newsfeeds.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,11 @@ public class UserController {
         String password=loginRequestDto.getPassword();
         User user =userService.LoginUser(name,password);
         return new LoginResponseDto(user);
-
+    }
+    public FollowResponseDto followUser(FollowRequestDto followRequestDto){
+        System.out.println("controller");
+        String name=followRequestDto.getName();
+        userService.followUser(name);
+        return null;
     }
 }

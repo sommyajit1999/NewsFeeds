@@ -5,4 +5,5 @@ public interface KeyWordRegister {
     String SIGNUP="signup";
     String LOGIN="login";
     String FOLLOW="follow";
+    String FEED="feed";
 }

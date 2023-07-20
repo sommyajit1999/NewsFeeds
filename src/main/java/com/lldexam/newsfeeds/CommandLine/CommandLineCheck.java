@@ -10,10 +10,14 @@ public class CommandLineCheck{
     List<CommandLineMethods> commands;
     @Autowired
     public CommandLineCheck(SignUpCommandPattern signUpCommandPattern,
-                            LoginCommandPattern loginCommandPattern){
+                            LoginCommandPattern loginCommandPattern,
+                            FollowCommandPattern followCommandPattern,
+                            FeedCommandPattern feedCommandPattern){
         commands=new ArrayList<>();
         commands.add(signUpCommandPattern);
         commands.add(loginCommandPattern);
+        commands.add(followCommandPattern);
+        commands.add(feedCommandPattern);
     }
     public void executeCommand(String input){
         for(CommandLineMethods commands:commands){
