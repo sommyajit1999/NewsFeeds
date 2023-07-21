@@ -3,9 +3,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import com.lldexam.newsfeeds.Controllers.CommentController;
 import com.lldexam.newsfeeds.Repo.CurrentUserRepo;
 import com.lldexam.newsfeeds.Repo.FeedRepository;
 import com.lldexam.newsfeeds.Repo.UserRepository;
+import com.lldexam.newsfeeds.models.Comments;
 import com.lldexam.newsfeeds.models.CurrentLoginUser;
 import com.lldexam.newsfeeds.models.Feeds;
 import com.lldexam.newsfeeds.models.User;
@@ -21,13 +24,15 @@ public class FeedService {
     CurrentUserRepo currentUserRepo;
     UserRepository userRepository;
     UpVotesShowFeedStrategy upVotesShowFeedStrategy;
+    CommentController commentController;
     Scanner sc;
     @Autowired
-    public FeedService(FeedRepository feedRepository,CurrentUserRepo currentUserRepo,UserRepository userRepository,UpVotesShowFeedStrategy upVotesShowFeedStrategy){
+    public FeedService(FeedRepository feedRepository,CurrentUserRepo currentUserRepo,UserRepository userRepository,UpVotesShowFeedStrategy upVotesShowFeedStrategy,CommentController commentController){
         this.feedRepository=feedRepository;
         this.currentUserRepo=currentUserRepo;
         this.userRepository=userRepository;
         this.upVotesShowFeedStrategy=upVotesShowFeedStrategy;
+        this.commentController=commentController;
         sc=new Scanner(System.in);
     }
     public Feeds getFeed(String feeds){
@@ -46,9 +51,7 @@ public class FeedService {
         feedss.add(feed);
         User updatefeedUser=user.get();
         feed.setUser(updatefeedUser);
-        updatefeedUser.setFeeds(feedss);
         Feeds f=feedRepository.save(feed);
-        User u=userRepository.save(updatefeedUser);
         return f;
     }
     public List<Feeds> showMyFeeds(){
@@ -69,8 +72,8 @@ public class FeedService {
                 System.out.println("No More Feeds!");
                 break;
             }
-            System.out.println(feedsListss.get(i).getFeedText()+ "  " + feedsListss.get(i).getDownVotes()+" DV"+" "+feedsListss.get(i).getUpVotes()+" UV"+ " "+feedsListss.get(i).getUser().getUserName()+" "+feedsListss.get(i).getTimeStamp());
-            System.out.println("Press: 1->Next Feed; 2->Upvote this feed; 3->DownVote this feed; 4->Back");
+            System.out.println("Feed"+(i+1)+": '"+feedsListss.get(i).getFeedText()+ "'  " + feedsListss.get(i).getDownVotes()+" DV"+" "+feedsListss.get(i).getUpVotes()+" UV"+ " "+feedsListss.get(i).getUser().getUserName()+" "+feedsListss.get(i).getTimeStamp());
+            System.out.println("Press: 1->Next Feed; 2->Upvote this feed; 3->DownVote this feed; 4->Comment; 5->Back");
             int input=sc.nextInt();
             if(input==1)
             {
@@ -87,7 +90,10 @@ public class FeedService {
                 feedRepository.save(feedsListss.get(i));
                 continue;
             }
-            else {
+            else if(input==4){
+                commentController.commentFunc(feedsListss.get(i));
+            }
+            else{
                 break;
             }
 

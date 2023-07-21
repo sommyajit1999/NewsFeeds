@@ -17,7 +17,6 @@ public class User extends BaseClass{
     private List<User> followers;
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> following;
-    @OneToMany(mappedBy = "user")
-    private List<Feeds> feeds;
+
 
 }
