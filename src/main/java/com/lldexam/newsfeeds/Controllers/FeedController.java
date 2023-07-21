@@ -2,10 +2,13 @@ package com.lldexam.newsfeeds.Controllers;
 
 import com.lldexam.newsfeeds.DTO.FeedRequestDto;
 import com.lldexam.newsfeeds.DTO.FeedResponseDto;
+import com.lldexam.newsfeeds.DTO.ShowMyFeedDto;
 import com.lldexam.newsfeeds.Service.FeedService;
 import com.lldexam.newsfeeds.models.Feeds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class FeedController {
@@ -18,7 +21,10 @@ public class FeedController {
         String feed=feedRequestDto.getText();
         Feeds f=feedService.getFeed(feed);
         return new FeedResponseDto(f);
-
+    }
+    public ShowMyFeedDto showmyfeed(){
+        List<Feeds> feedsList=feedService.showMyFeeds();
+        return null;
     }
 
 }

@@ -1,5 +1,8 @@
 package com.lldexam.newsfeeds.Service;
-
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import com.lldexam.newsfeeds.Repo.CurrentUserRepo;
 import com.lldexam.newsfeeds.Repo.FeedRepository;
 import com.lldexam.newsfeeds.Repo.UserRepository;
@@ -9,23 +12,22 @@ import com.lldexam.newsfeeds.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
 
 @Service
 public class FeedService {
     FeedRepository feedRepository;
     CurrentUserRepo currentUserRepo;
     UserRepository userRepository;
+    Scanner sc;
     @Autowired
     public FeedService(FeedRepository feedRepository,CurrentUserRepo currentUserRepo,UserRepository userRepository){
         this.feedRepository=feedRepository;
         this.currentUserRepo=currentUserRepo;
         this.userRepository=userRepository;
+        sc=new Scanner(System.in);
     }
     public Feeds getFeed(String feeds){
-        System.out.println(feeds);
         CurrentLoginUser currentLoginUser=currentUserRepo.findTopByOrderByIdDesc();
         Feeds feed=new Feeds();
         feed.setFeedText(feeds);
@@ -45,5 +47,50 @@ public class FeedService {
         Feeds f=feedRepository.save(feed);
         User u=userRepository.save(updatefeedUser);
         return f;
+    }
+    public List<Feeds> showMyFeeds(){
+        CurrentLoginUser currentLoginUser=currentUserRepo.findTopByOrderByIdDesc();
+        Optional<List<Feeds>> feedsList=feedRepository.findAllByUserId(currentLoginUser.getCurrentUser().getId());
+        if(feedsList.isEmpty()){
+            System.out.println("NO FEEDS FOUND");
+            return null;
+        }
+        System.out.println("My Feeds:");
+//        for(Feeds feeds:feedsList.get()){
+//            System.out.println(feeds.getFeedText() + "  " + feeds.getDownVotes()+" DV"+" "+feeds.getUpVotes()+" UV"+ " "+feeds.getTimeStamp());
+//
+//
+//        }
+        List<Feeds> feedsListss=feedsList.get();
+        int i=0;
+        while (true){
+            if(i==feedsListss.size()){
+                System.out.println("No More Feeds!");
+                break;
+            }
+            System.out.println(feedsListss.get(i).getFeedText()+ "  " + feedsListss.get(i).getDownVotes()+" DV"+" "+feedsListss.get(i).getUpVotes()+" UV"+ " "+feedsListss.get(i).getUser().getUserName()+" "+feedsListss.get(i).getTimeStamp());
+            System.out.println("Press: 1->Next Feed; 2->Upvote this feed; 3->DownVote this feed; 4->Back");
+            int input=sc.nextInt();
+            if(input==1)
+            {
+                i++;
+                continue;
+            }
+            else if(input==2){
+                feedsListss.get(i).setUpVotes(feedsListss.get(i).getUpVotes()+1);
+                feedRepository.save(feedsListss.get(i));
+                continue;
+            }
+            else if(input==3){
+                feedsListss.get(i).setDownVotes(feedsListss.get(i).getDownVotes()+1);
+                feedRepository.save(feedsListss.get(i));
+                continue;
+            }
+            else {
+                break;
+            }
+
+        }
+        return feedsListss;
     }
 }

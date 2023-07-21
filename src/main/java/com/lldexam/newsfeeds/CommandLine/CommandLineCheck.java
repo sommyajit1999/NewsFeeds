@@ -12,12 +12,14 @@ public class CommandLineCheck{
     public CommandLineCheck(SignUpCommandPattern signUpCommandPattern,
                             LoginCommandPattern loginCommandPattern,
                             FollowCommandPattern followCommandPattern,
-                            FeedCommandPattern feedCommandPattern){
+                            FeedCommandPattern feedCommandPattern,
+                            ShowMyFeedCommandPattern showMyFeedCommandPattern){
         commands=new ArrayList<>();
         commands.add(signUpCommandPattern);
         commands.add(loginCommandPattern);
         commands.add(followCommandPattern);
         commands.add(feedCommandPattern);
+        commands.add(showMyFeedCommandPattern);
     }
     public void executeCommand(String input){
         for(CommandLineMethods commands:commands){
