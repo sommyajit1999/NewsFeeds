@@ -6,5 +6,5 @@ public interface KeyWordRegister {
     String LOGIN="login";
     String FOLLOW="follow";
     String FEED="feed";
-    String SHOWFEED="showfeed";
+    String SHOWFEED="showmyfeed";
 }

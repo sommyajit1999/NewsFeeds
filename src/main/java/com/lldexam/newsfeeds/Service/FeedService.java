@@ -9,6 +9,7 @@ import com.lldexam.newsfeeds.Repo.UserRepository;
 import com.lldexam.newsfeeds.models.CurrentLoginUser;
 import com.lldexam.newsfeeds.models.Feeds;
 import com.lldexam.newsfeeds.models.User;
+import com.lldexam.newsfeeds.showFeedStrategy.UpVotesShowFeedStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,14 @@ public class FeedService {
     FeedRepository feedRepository;
     CurrentUserRepo currentUserRepo;
     UserRepository userRepository;
+    UpVotesShowFeedStrategy upVotesShowFeedStrategy;
     Scanner sc;
     @Autowired
-    public FeedService(FeedRepository feedRepository,CurrentUserRepo currentUserRepo,UserRepository userRepository){
+    public FeedService(FeedRepository feedRepository,CurrentUserRepo currentUserRepo,UserRepository userRepository,UpVotesShowFeedStrategy upVotesShowFeedStrategy){
         this.feedRepository=feedRepository;
         this.currentUserRepo=currentUserRepo;
         this.userRepository=userRepository;
+        this.upVotesShowFeedStrategy=upVotesShowFeedStrategy;
         sc=new Scanner(System.in);
     }
     public Feeds getFeed(String feeds){
@@ -56,12 +59,10 @@ public class FeedService {
             return null;
         }
         System.out.println("My Feeds:");
-//        for(Feeds feeds:feedsList.get()){
-//            System.out.println(feeds.getFeedText() + "  " + feeds.getDownVotes()+" DV"+" "+feeds.getUpVotes()+" UV"+ " "+feeds.getTimeStamp());
-//
-//
-//        }
-        List<Feeds> feedsListss=feedsList.get();
+
+        return showMyFeeds(upVotesShowFeedStrategy.showFeeds(feedsList));
+    }
+    public List<Feeds> showMyFeeds(List<Feeds> feedsListss){
         int i=0;
         while (true){
             if(i==feedsListss.size()){
@@ -93,4 +94,5 @@ public class FeedService {
         }
         return feedsListss;
     }
+
 }
