@@ -7,3 +7,5 @@
 6) type showmyfeed to view your own feed
 7) you can also upvote/downvote your feeds
 8) Feeds are sorted by Upvotes
+9) you can comment on your feed
+10) you see all the comments or your feed
